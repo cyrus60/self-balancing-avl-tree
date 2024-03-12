@@ -1,8 +1,10 @@
-// Contains class AVLTree
-#include <iostream>
-using namespace std;
-
 #pragma once
+// FILE: AVLTree.h
+// CLASS PROVVIDED: AVLTree
+
+#include <iostream>
+
+using namespace std;
 
 class AVLTree {
 // defines class for AVLTree nodes that will contain a key, a height, and left/right pointers
@@ -19,15 +21,18 @@ private:
 	// pointer to the root of the AVLTree
 	Node* root;
 
-	/// @brief insertHelper, recursive function that traverses tree and inserts key respectively
-	/// @param int key key to be inserted 
-	/// @param Node*& reference to current node 
-	/// @return boolean whether or not key was successfully inserted
-	bool insertHelper(int, Node*&);
+	/// @brief recursive function that traverses tree and inserts key respectively
+	/// @param key key to be inserted 
+	/// @param current reference to current node 
+	/// @return boolean whether or not key was succesfully inserted
+	bool insertHelper(int key, Node*& current);
 
 public:
-
+	/// @brief AVLTree constructor
 	AVLTree();
 
-	bool insert(int);
+	/// @brief public insert function. makes recursive call to input helper
+	/// @param key value to be inserted
+	/// @return bool value if inserted succsesfully or not
+	bool insert(int key);
 };

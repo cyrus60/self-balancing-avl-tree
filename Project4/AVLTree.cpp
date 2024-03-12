@@ -15,6 +15,7 @@ bool AVLTree::insert(int key) {
 //		current (Node*&) - reference to current Node
 bool AVLTree::insertHelper(int key, Node*& current) {
 	bool returnVal;
+
 	if (!current) {
 		current = new Node(key);
 		returnVal = true;
