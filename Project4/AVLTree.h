@@ -1,38 +1,67 @@
 #pragma once
 // FILE: AVLTree.h
-// CLASS PROVVIDED: AVLTree
+// CLASS PROVIDED: AVLTree
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 class AVLTree {
-// defines class for AVLTree nodes that will contain a key, a height, and left/right pointers
+// defines class for AVLTree nodes that will contain a key, value, a height, and left/right pointers
 private:
 	class Node {
 	public:
 		int key; 
+		string value;
 		int height = 0;
 		Node* left = nullptr;
 		Node* right = nullptr;
-		Node(int newKey): key(newKey), left(nullptr), right(nullptr) {}
+		Node(int newKey, string newVal): key(newKey), value(newVal), left(nullptr), right(nullptr) {}
 	};
 
 	// pointer to the root of the AVLTree
 	Node* root;
 
 	/// @brief recursive function that traverses tree and inserts key respectively
-	/// @param key key to be inserted 
+	/// @param key key of key value pair
+	/// @param value value og key value pair
 	/// @param current reference to current node 
 	/// @return boolean whether or not key was succesfully inserted
-	bool insertHelper(int key, Node*& current);
+	bool insertHelper(int key, string value, Node*& current);
+
+	/// @brief
+	/// @param
+	/// @return 
+	void calcHeight(Node* current);
 
 public:
 	/// @brief AVLTree constructor
 	AVLTree();
 
 	/// @brief public insert function. makes recursive call to input helper
-	/// @param key value to be inserted
+	/// @param key of key value pair
+	/// @param value value of key value pair
 	/// @return bool value if inserted succsesfully or not
-	bool insert(int key);
+	bool insert(int key, string value);
+
+	/// @brief
+	/// @param
+	/// @return
+	int getHeight();
+
+	/// @brief
+	/// @param
+	/// @return
+	int getSize();
+
+	/// @brief
+	/// @param
+	/// @return
+	bool find(int key, string& value);
+
+	/// @brief
+	/// @param
+	/// @return
+	vector<string> findRange(int lowkey, int highkey);
 };
