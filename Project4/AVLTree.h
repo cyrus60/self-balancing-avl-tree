@@ -30,11 +30,6 @@ private:
 	/// @return boolean whether or not key was succesfully inserted
 	bool insertHelper(int key, string value, Node*& current);
 
-	/// @brief
-	/// @param
-	/// @return 
-	void calcHeight(Node* current);
-
 public:
 	/// @brief AVLTree constructor
 	AVLTree();

@@ -34,7 +34,26 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 		returnVal = insertHelper(key, value, current->right);
 	}
 	// code to recalculate height of current node 
-	calcHeight(current);
+	if (!current->right && !current->left) {
+		current->height = current->height;
+	}
+	else if (!current->left) {
+		current->height = current->right->height + 1;
+	}
+	else if (!current->right) {
+		current->height = current->left->height + 1;
+	}
+	else {
+		if (current->left->height > current->right->height) {
+			current->height = current->left->height + 1;
+		}
+		else if (current->left->height < current->right->height) {
+			current->height = current->right->height + 1;
+		}
+		else {
+			current->height = current->left->height + 1;
+		}
+	}
 
 	// Check my balance and rotate if necesarry
 
@@ -53,35 +72,4 @@ int AVLTree::getHeight() {
 // Parameters: none
 int AVLTree::getSize() {
 	return 0;
-}
-
-// calcHeight: Calculates the height of a Node
-// Returns: height of current Node (int)
-// Parameters: 
-//		current (Node*) - pointer to Node 
-void AVLTree::calcHeight(Node* current) {
-	int leftHeight = 0;
-	int rightHeight = 0;
-	Node* currentRight = current;
-	Node* currentLeft = current;
-
-	// calculates height of left side 
-	while (currentLeft != nullptr) {
-		leftHeight += 1;
-		currentLeft = currentLeft->left;
-	}
-
-	// calculates height of right side
-	while (currentRight != nullptr) {
-		rightHeight += 1;
-		currentRight = currentRight->right;
-	}
-	
-	// 
-	if (leftHeight > rightHeight) {
-		current->height = leftHeight;
-	}
-	else {
-		current->height = rightHeight;
-	}
 }
