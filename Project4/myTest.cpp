@@ -10,5 +10,6 @@ int main() {
 	t.insert(7, "Seven");
 	t.insert(13, "Thirteen");
 	t.insert(14, "Fourteen");
+	t.insert(15, "Fifteen");
 	cout << t.getHeight() << endl;
 }

@@ -73,3 +73,17 @@ int AVLTree::getHeight() {
 int AVLTree::getSize() {
 	return 0;
 }
+
+// find:
+// Returns:
+// Paramters:
+bool AVLTree::find(int key, string& value) {
+
+}
+
+// findRange:
+// Returns:
+// Parameters:
+vector<string> findRange(int lowkey, int highkey) {
+
+}
