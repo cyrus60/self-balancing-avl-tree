@@ -18,6 +18,11 @@ private:
 		Node* left = nullptr;
 		Node* right = nullptr;
 		Node(int newKey, string newVal): key(newKey), value(newVal), left(nullptr), right(nullptr) {}
+
+		/// @brief
+		/// @param
+		/// @return
+		void calcHeight();
 	};
 
 	// pointer to the root of the AVLTree

@@ -4,6 +4,32 @@ AVLTree::AVLTree() {
 	root = nullptr;
 }
 
+// calcHeight:
+// Returns:
+// Paramaters:
+void AVLTree::Node::calcHeight() {
+	if (!right && !left) {
+		height = height;
+	}
+	else if (!left) {
+		height = right->height + 1;
+	}
+	else if (!right) {
+		height = left->height + 1;
+	}
+	else {
+		if (left->height > right->height) {
+			height = left->height + 1;
+		}
+		else if (left->height < right->height) {
+			height = right->height + 1;
+		}
+		else {
+			height = left->height + 1;
+		}
+	}
+}
+
 // insert:
 // Returns:
 // Paramaters: 
@@ -34,26 +60,7 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 		returnVal = insertHelper(key, value, current->right);
 	}
 	// code to recalculate height of current node 
-	if (!current->right && !current->left) {
-		current->height = current->height;
-	}
-	else if (!current->left) {
-		current->height = current->right->height + 1;
-	}
-	else if (!current->right) {
-		current->height = current->left->height + 1;
-	}
-	else {
-		if (current->left->height > current->right->height) {
-			current->height = current->left->height + 1;
-		}
-		else if (current->left->height < current->right->height) {
-			current->height = current->right->height + 1;
-		}
-		else {
-			current->height = current->left->height + 1;
-		}
-	}
+	current->calcHeight();
 
 	// Check my balance and rotate if necesarry
 
@@ -78,12 +85,28 @@ int AVLTree::getSize() {
 // Returns:
 // Paramters:
 bool AVLTree::find(int key, string& value) {
+	if (key == root->key) {
+		value = root->value;
+		return true;
+	}
+	else if (key > root->key) {
+		// sets current pointer equal to roots right child if key param is greater than roots key
+		Node* current = root->right;
 
+		// code to search both children of current node in O(log n) time 
+	}
+	else if (key < root->key) {
+		// sets current pointer equal to roots left child if key param is less than roots key
+		Node* current = root->left;
+
+		// code to search both children of current node in O(log n) time 
+	}
 }
 
 // findRange:
 // Returns:
 // Parameters:
 vector<string> findRange(int lowkey, int highkey) {
-
+	vector<string> hi;
+	return hi;
 }
