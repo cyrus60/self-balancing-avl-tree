@@ -93,23 +93,25 @@ bool AVLTree::findHelper(int key, string& value, Node*& current) {
 	}
 }
 
-// getHeight: 
+// getHeight: returns height of tree
 // Returns: height of AVLTree (int)
 // Parameters: none
 int AVLTree::getHeight() {
 	return root->height;
 }
 
-// getSize: 
+// getSize: traverses tree recursively and counts number of nodes
 // Returns: size of AVLTree based on number of nodes (int)
 // Parameters: none
 int AVLTree::getSize() {
 	return 0;
 }
 
-// find:
-// Returns:
-// Paramters:
+// find: calls recursive function findHelper
+// Returns: Whether or not the key was found in the tree (bool)
+// Paramaters:
+//		key (int) - key of key value pair
+//		value (string&) - reference to string that value of key will be stored in
 bool AVLTree::find(int key, string& value) {
 	return findHelper(key, value, root);
 }
