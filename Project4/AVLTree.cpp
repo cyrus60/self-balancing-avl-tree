@@ -1,4 +1,5 @@
 #include "AVLTree.h"
+#include <iostream>
 
 AVLTree::AVLTree() {
 	root = nullptr;
@@ -30,9 +31,11 @@ void AVLTree::Node::calcHeight() {
 	}
 }
 
-// insert:
-// Returns:
+// insert: calls recursive function insertHelper
+// Returns: whether or not key value pair was inserted succesfully (bool)
 // Paramaters: 
+//		key (int) - key of key-value pair to be inserted
+//		value (string) - value of key-value pair to be inserted
 bool AVLTree::insert(int key, string value) {
 	return insertHelper(key, value, root);
 }
@@ -59,12 +62,35 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	else {
 		returnVal = insertHelper(key, value, current->right);
 	}
-	// code to recalculate height of current node 
+	// recalculates height of current node 
 	current->calcHeight();
 
 	// Check my balance and rotate if necesarry
+	
 
 	return returnVal;
+}
+
+// insertHelper: recursive find function called from find
+// Returns: Whether or not the given key was found in the tree or not 
+// Parameters: 
+//		key (int) - key of key value pair
+//		value (string) - value of key value pair
+//		current (Node*&) - reference to current Node
+bool AVLTree::findHelper(int key, string& value, Node*& current) {
+	if (current == nullptr) {
+		return false;
+	}
+	else if (current->key == key) {
+		value = current->value;
+		return true;
+	}
+	else if (key < current->key) {
+		return findHelper(key, value, current->left);
+	}
+	else {
+		return findHelper(key, value, current->right);
+	}
 }
 
 // getHeight: 
@@ -85,22 +111,7 @@ int AVLTree::getSize() {
 // Returns:
 // Paramters:
 bool AVLTree::find(int key, string& value) {
-	if (key == root->key) {
-		value = root->value;
-		return true;
-	}
-	else if (key > root->key) {
-		// sets current pointer equal to roots right child if key param is greater than roots key
-		Node* current = root->right;
-
-		// code to search both children of current node in O(log n) time 
-	}
-	else if (key < root->key) {
-		// sets current pointer equal to roots left child if key param is less than roots key
-		Node* current = root->left;
-
-		// code to search both children of current node in O(log n) time 
-	}
+	return findHelper(key, value, root);
 }
 
 // findRange:

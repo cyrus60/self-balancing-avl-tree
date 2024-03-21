@@ -8,20 +8,20 @@
 using namespace std;
 
 class AVLTree {
-// defines class for AVLTree nodes that will contain a key, value, a height, and left/right pointers
+	// defines class for AVLTree nodes that will contain a key, value, a height, and left/right pointers
 private:
 	class Node {
 	public:
-		int key; 
+		int key;
 		string value;
 		int height = 0;
 		Node* left = nullptr;
 		Node* right = nullptr;
-		Node(int newKey, string newVal): key(newKey), value(newVal), left(nullptr), right(nullptr) {}
+		Node(int newKey, string newVal) : key(newKey), value(newVal), left(nullptr), right(nullptr) {}
 
-		/// @brief
-		/// @param
-		/// @return
+		/// @brief calculates height of current Node 
+		/// @param none
+		/// @return none
 		void calcHeight();
 	};
 
@@ -34,6 +34,13 @@ private:
 	/// @param current reference to current node 
 	/// @return boolean whether or not key was succesfully inserted
 	bool insertHelper(int key, string value, Node*& current);
+
+	/// @brief recursive function that traverses tree and finds any nodes with the same key as the one given
+	/// @param key key of key value pair
+	/// @param value reference to value item associated with the key 
+	/// @param current reference to current node 
+	/// @return boolean whether or not key was succesfully found
+	bool findHelper(int key, string& value, Node*& current);
 
 public:
 	/// @brief AVLTree constructor
@@ -64,4 +71,6 @@ public:
 	/// @param
 	/// @return
 	vector<string> findRange(int lowkey, int highkey);
+
+
 };
