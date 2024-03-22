@@ -42,6 +42,13 @@ private:
 	/// @return boolean whether or not key was succesfully found
 	bool findHelper(int key, string& value, Node*& current);
 
+	/// @brief recursive function that traverses tree and finds any nodes with the same key as the one given
+	/// @param key key of key value pair
+	/// @param value reference to value item associated with the key 
+	/// @param current reference to current node 
+	/// @return boolean whether or not key was succesfully found
+	void findRangeHelper(int lowkey, int highkey, vector<string>& vals, Node* current);
+
 public:
 	/// @brief AVLTree constructor
 	AVLTree();

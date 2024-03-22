@@ -1,19 +1,16 @@
 #include "AVLTree.h"
+#include <vector>
 
 int main() {
 	AVLTree t;
+	t.insert(40, "Forty");
+	t.insert(20, "Twenty");
 	t.insert(10, "Ten");
-	t.insert(9, "Nine");
-	t.insert(8, "Eight");
-	t.insert(11, "Eleven");
-	t.insert(12, "Twelve");
-	t.insert(7, "Seven");
-	t.insert(13, "Thirteen");
-	t.insert(14, "Fourteen");
-	t.insert(15, "Fifteen");
-	t.insert(16, "Sixteen");
-	string result;
-	t.find(7, result);
-	cout << result << endl;
-	cout << t.getHeight() << endl;
+	t.insert(30, "Thirty");
+	t.insert(50, "Fifty");
+	t.insert(45, "Forty-five");
+	vector<string> vals = t.findRange(30, 47);
+	for (string s : vals) {
+		cout << s << endl;
+	}
 }

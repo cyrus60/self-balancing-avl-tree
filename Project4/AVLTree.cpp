@@ -1,13 +1,12 @@
 #include "AVLTree.h"
-#include <iostream>
 
 AVLTree::AVLTree() {
 	root = nullptr;
 }
 
-// calcHeight:
-// Returns:
-// Paramaters:
+// calcHeight: calulates height of current node 
+// Returns: none
+// Paramaters: none
 void AVLTree::Node::calcHeight() {
 	if (!right && !left) {
 		height = height;
@@ -71,7 +70,7 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	return returnVal;
 }
 
-// insertHelper: recursive find function called from find
+// findHelper: recursive find function called from find
 // Returns: Whether or not the given key was found in the tree or not 
 // Parameters: 
 //		key (int) - key of key value pair
@@ -90,6 +89,24 @@ bool AVLTree::findHelper(int key, string& value, Node*& current) {
 	}
 	else {
 		return findHelper(key, value, current->right);
+	}
+}
+
+// findRangeHelper: Recursive findRange function called from findRange
+// Returns: Whether or not the given key was found in the tree or not 
+// Parameters: 
+//		key (int) - key of key value pair
+//		value (string) - value of key value pair
+//		current (Node*&) - reference to current Node
+void AVLTree::findRangeHelper(int lowkey, int highkey, vector<string>& vals, Node* current) {
+	if (current) {
+		findRangeHelper(lowkey, highkey, vals, current->left);
+
+		if (current->key >= lowkey && current->key <= highkey) {
+			vals.push_back(current->value);
+		}
+
+		findRangeHelper(lowkey, highkey, vals, current->right);
 	}
 }
 
@@ -116,10 +133,14 @@ bool AVLTree::find(int key, string& value) {
 	return findHelper(key, value, root);
 }
 
-// findRange:
-// Returns:
-// Parameters:
-vector<string> findRange(int lowkey, int highkey) {
-	vector<string> hi;
-	return hi;
+// findRange: Finds and returns all values between specified keys
+// Returns: Vector of all values in range (vector<string>)
+// Parameters: 
+//		lowkey (int) - low bound of search range
+//		highkey (int) - upper bound of search range
+vector<string> AVLTree::findRange(int lowkey, int highkey) {
+	vector<string> vals;
+	findRangeHelper(lowkey, highkey, vals, root);
+
+	return vals;
 }
