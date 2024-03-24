@@ -1,15 +1,75 @@
 #include "AVLTree.h"
+#include <iostream>
 
 AVLTree::AVLTree() {
 	root = nullptr;
+	size = 0;
 }
+
+// leftRotate: performs a right rotation at current node
+// Returns: none
+// Paramaters: 
+//		problem (Node*) - pointer to problem node 
+
+void AVLTree::leftRotate(Node* problem) {
+	// setting hook node as problem nodes right child
+	Node* hook = problem->right;
+
+	// setting temp pointer to hooks left child if one exists
+	if (hook->left) {
+		Node* temp = hook->left;
+
+		hook->left = problem;
+		problem->right = temp;
+	}
+	// if hook doesn't have left child, set hooks left child equal to problem node
+	else {
+		hook->left = problem;
+		problem->right = nullptr;
+
+		if (root->key == problem->key) {
+			root = hook;
+		}
+	}
+}
+
+// rightRotate: performs a right rotation at current node
+// Returns: none
+// Paramaters: 
+//		problem (Node*) - pointer to problem node 
+void AVLTree::rightRotate(Node* problem) {
+	// setting hook node as problem nodes left child
+	Node* hook = problem->left;
+
+	// setting temp pointer to hooks right child if one exists
+	if (hook->right) {
+		Node* temp = hook->right;
+
+		hook->right = problem;
+		problem->left = temp;
+	}
+	// if hook doesn't have right child, set hooks right child equal to problem node
+	else {
+		hook->right = problem;
+		problem->left = nullptr;
+
+		if (root->key == problem->key) {
+			root = hook;
+		}
+	}
+
+	// recalculate heights 
+	hook->calcHeight();
+	problem->calcHeight();
+}
+
 
 // calcHeight: calulates height of current node 
 // Returns: none
 // Paramaters: none
 void AVLTree::Node::calcHeight() {
 	if (!right && !left) {
-		height = height;
+		height = 0;;
 	}
 	else if (!left) {
 		height = right->height + 1;
@@ -30,13 +90,37 @@ void AVLTree::Node::calcHeight() {
 	}
 }
 
+// balanceFactor: calulates balance of current node 
+// Returns: balance of current node (int)
+// Paramaters: none
+int AVLTree::Node::balanceFactor() {
+	if (!left && !right) {
+		return 0;
+	}
+	else if (!right) {
+		return left->height + 1;
+	}
+	else if (!left) {
+		return (0 - (right->height + 1));
+	}
+	else {
+		return (left->height + 1) - (right->height + 1);
+	}
+}
+
 // insert: calls recursive function insertHelper
 // Returns: whether or not key value pair was inserted succesfully (bool)
 // Paramaters: 
 //		key (int) - key of key-value pair to be inserted
 //		value (string) - value of key-value pair to be inserted
 bool AVLTree::insert(int key, string value) {
-	return insertHelper(key, value, root);
+	bool success = insertHelper(key, value, root);
+
+	if (success) {
+		size += 1;
+	}
+
+	return success;
 }
 
 // insertHelper: recursive insert function called from insert
@@ -51,6 +135,10 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	if (!current) {
 		current = new Node(key, value);
 		returnVal = true;
+
+		if (size == 0) {
+			root = current;
+		}
 	}
 	else if (current->key == key) {
 		returnVal = false;
@@ -65,7 +153,29 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	current->calcHeight();
 
 	// Check my balance and rotate if necesarry
-	
+	int balance = current->balanceFactor();
+
+	if (balance > 1) {
+		Node* hook = current->left;
+
+		if (hook->balanceFactor() < 0) {
+
+		}
+		else {
+			rightRotate(current);
+		}
+	}
+	else if (balance < -1) {
+		Node* hook = current->right;
+
+		if (hook->balanceFactor() > 0) {
+
+		}
+		else {
+			leftRotate(current);
+		}
+
+	}
 
 	return returnVal;
 }
@@ -77,7 +187,7 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 //		value (string) - value of key value pair
 //		current (Node*&) - reference to current Node
 bool AVLTree::findHelper(int key, string& value, Node*& current) {
-	if (current == nullptr) {
+	if (!current) {
 		return false;
 	}
 	else if (current->key == key) {
@@ -121,7 +231,7 @@ int AVLTree::getHeight() {
 // Returns: size of AVLTree based on number of nodes (int)
 // Parameters: none
 int AVLTree::getSize() {
-	return 0;
+	return size;
 }
 
 // find: calls recursive function findHelper
@@ -143,4 +253,13 @@ vector<string> AVLTree::findRange(int lowkey, int highkey) {
 	findRangeHelper(lowkey, highkey, vals, root);
 
 	return vals;
+}
+
+// <<: Prints out AVLTree sideways to demonstrate structure of the tree
+// Returns: 
+// Parameters: 
+//		os (ostream&) - output streeam to be used to print
+//		tree (AVLTree&) - reference to AVLTree
+ostream& operator<<(ostream& os, const AVLTree& tree) {
+	return os;
 }

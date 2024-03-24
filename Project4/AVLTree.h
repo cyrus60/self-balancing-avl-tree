@@ -23,10 +23,15 @@ private:
 		/// @param none
 		/// @return none
 		void calcHeight();
+
+		/// @brief calculates balance of current node
+		/// @param none
+		/// @return int balance factor of node
+		int balanceFactor();
 	};
 
 	// pointer to the root of the AVLTree
-	Node* root;
+	
 
 	/// @brief recursive function that traverses tree and inserts key respectively
 	/// @param key key of key value pair
@@ -51,7 +56,12 @@ private:
 
 public:
 	/// @brief AVLTree constructor
+	Node* root;
+
 	AVLTree();
+
+	/// @brief size field keeping track of tree size in terms of total nodes
+	int size;
 
 	/// @brief public insert function. makes recursive call to input helper
 	/// @param key of key value pair
@@ -79,5 +89,18 @@ public:
 	/// @return
 	vector<string> findRange(int lowkey, int highkey);
 
+	/// @brief
+	/// @param
+	/// @return
+	friend ostream& operator<<(ostream& os, const AVLTree& me);
 
+	/// @brief
+	/// @param
+	/// @return
+	void rightRotate(Node* problem);
+
+	/// @brief
+	/// @param
+	/// @return
+	void leftRotate(Node* problem);
 };
