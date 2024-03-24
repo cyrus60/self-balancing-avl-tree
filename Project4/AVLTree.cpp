@@ -31,6 +31,10 @@ void AVLTree::leftRotate(Node* problem) {
 			root = hook;
 		}
 	}
+
+	// recalculate heights 
+	hook->calcHeight();
+	problem->calcHeight();
 }
 
 // rightRotate: performs a right rotation at current node
