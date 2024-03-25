@@ -17,19 +17,20 @@ AVLTree::AVLTree(const AVLTree& t) {
 // leftRotate: performs a right rotation at current node
 // Returns: none
 // Paramaters: 
-//		problem (Node*) - pointer to problem node 
-
+//		problem (Node*&) - pointer to problem node 
 void AVLTree::leftRotate(Node*& problem) {
 	// setting hook node as problem nodes right child
 	Node* hook = problem->right;
+	// setting a tempPointer to problem node 
 	Node* problemTemp = problem;
 
 	// setting temp pointer to hooks left child if one exists
 	if (hook->left) {
 		Node* temp = hook->left;
 
-		hook->left = problem;
-		problem->right = temp;
+		problem = hook;
+		hook->left = problemTemp;
+		problemTemp->right = temp;
 	}
 	// if hook doesn't have left child, set hooks left child equal to problem node
 	else {
@@ -38,6 +39,7 @@ void AVLTree::leftRotate(Node*& problem) {
 		problemTemp->right = nullptr;
 	}
 
+	// if root key and problem key are the same, hook is root
 	if (root->key == problem->key) {
 		root = hook;
 	}
@@ -50,18 +52,20 @@ void AVLTree::leftRotate(Node*& problem) {
 // rightRotate: performs a right rotation at current node
 // Returns: none
 // Paramaters: 
-//		problem (Node*) - pointer to problem node 
+//		problem (Node*&) - pointer to problem node 
 void AVLTree::rightRotate(Node*& problem) {
 	// setting hook node as problem nodes left child
 	Node* hook = problem->left;
+	// setting a tempPointer to problem node 
 	Node* problemTemp = problem;
 
 	// setting temp pointer to hooks right child if one exists
 	if (hook->right) {
 		Node* temp = hook->right;
 
-		hook->right = problem;
-		problem->left = temp;
+		problem = hook;
+		hook->right = problemTemp;
+		problemTemp->left = temp;
 	}
 	// if hook doesn't have right child, set hooks right child equal to problem node
 	else {
@@ -71,6 +75,7 @@ void AVLTree::rightRotate(Node*& problem) {
 
 	}
 
+	// if root key and problem key are the same, hook is root
 	if (root->key == problem->key) {
 		root = hook;
 	}
@@ -85,6 +90,7 @@ void AVLTree::rightRotate(Node*& problem) {
 // Returns: none
 // Paramaters: none
 void AVLTree::Node::calcHeight() {
+	// if right and left child are null, height = 0
 	if (!right && !left) {
 		height = 0;
 	}
@@ -94,6 +100,7 @@ void AVLTree::Node::calcHeight() {
 	else if (!right) {
 		height = left->height + 1;
 	}
+	// if node has both right and left child, set height equal to the greater height of the two nodes
 	else {
 		if (left->height > right->height) {
 			height = left->height + 1;
@@ -111,6 +118,7 @@ void AVLTree::Node::calcHeight() {
 // Returns: balance of current node (int)
 // Paramaters: none
 int AVLTree::Node::balanceFactor() {
+	// balance is zero if right and left are null
 	if (!left && !right) {
 		return 0;
 	}
@@ -120,6 +128,7 @@ int AVLTree::Node::balanceFactor() {
 	else if (!left) {
 		return (0 - (right->height + 1));
 	}
+	// if Node has both left and right, balance equals left height minus right height
 	else {
 		return (left->height + 1) - (right->height + 1);
 	}
@@ -149,20 +158,25 @@ bool AVLTree::insert(int key, string value) {
 bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	bool returnVal;
 
+	// if current Node is null, set current equal to new Node
 	if (!current) {
 		current = new Node(key, value);
 		returnVal = true;
 
+		// if tree is empty, current is root
 		if (size == 0) {
 			root = current;
 		}
 	}
+	// if key parameter equals current Node's key, return false (no duplicates)
 	else if (current->key == key) {
 		returnVal = false;
 	}
+	// if current Node's key is greater than key parameter, recursive call on left child
 	else if (current->key > key) {
 		returnVal = insertHelper(key, value, current->left);
 	}
+	// recursive call on right child otherwise
 	else {
 		returnVal = insertHelper(key, value, current->right);
 	}
@@ -172,34 +186,38 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	// Check my balance and rotate if necesarry
 	int balance = current->balanceFactor();
 
+	// if balance of current node is greater than one, set hook pointer equal to currents left child and rotate
 	if (balance > 1) {
 		Node* hook = current->left;
 
+		// if problem node and hook node have opposite-sign balance factors, double rotate
 		if (hook->balanceFactor() < 0) {
 			Node* newHook = current->left->right;
 			leftRotate(hook);
 			current->left = newHook;
 			rightRotate(current);
 		}
+		// if problem node and hook node balance factors are same sign, right rotate
 		else {
 			rightRotate(current);
 		}
 	}
+	// if balance of current node is less than negative one, set hook pointer equal to currents right child and rotate 
 	else if (balance < -1) {
 		Node* hook = current->right;
 
+		// if problem node and hook node have opposite-sign balance factors, double rotate
 		if (hook->balanceFactor() > 0) {
 			Node* newHook = current->right->left;
 			rightRotate(hook);
 			current->right = newHook;
 			leftRotate(current);
 		}
+		// if problem node and hook node balance factors are same sign, left rotate
 		else {
 			leftRotate(current);
 		}
-
 	}
-
 	return returnVal;
 }
 
@@ -210,16 +228,20 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 //		value (string) - value of key value pair
 //		current (Node*&) - reference to current Node
 bool AVLTree::findHelper(int key, string& value, Node*& current) {
+	// base case
 	if (!current) {
 		return false;
 	}
+	// if keys are equal, set value reference equal to current Node's value
 	else if (current->key == key) {
 		value = current->value;
 		return true;
 	}
+	// if key arg is less than current Node's key, recursive call on current's left child
 	else if (key < current->key) {
 		return findHelper(key, value, current->left);
 	}
+	// recursive call on current's right child if key arg is greater than current Node's key
 	else {
 		return findHelper(key, value, current->right);
 	}
@@ -278,12 +300,20 @@ vector<string> AVLTree::findRange(int lowkey, int highkey) {
 	return vals;
 }
 
+// print: Prints out AVLTree sideways to demonstrate structure of the tree
+// Returns:
+// Parameters:
+void print(ostream& os) {
+
+}
+
 // <<: Prints out AVLTree sideways to demonstrate structure of the tree
 // Returns: 
 // Parameters: 
 //		os (ostream&) - output streeam to be used to print
 //		tree (AVLTree&) - reference to AVLTree
-ostream& operator<<(ostream& os, const AVLTree& tree) {
+ostream& operator<<(ostream& os, const AVLTree& t) {
+	t.print(os);
 	return os;
 }
 

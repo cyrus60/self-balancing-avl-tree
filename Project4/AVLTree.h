@@ -31,7 +31,7 @@ private:
 	};
 
 	// pointer to the root of the AVLTree
-	
+	Node* root;
 
 	/// @brief recursive function that traverses tree and inserts key respectively
 	/// @param key key of key value pair
@@ -56,8 +56,6 @@ private:
 
 public:
 	/// @brief AVLTree constructor
-	Node* root;
-
 	AVLTree();
 
 	/// @brief AVLTree copy constructor
@@ -95,7 +93,12 @@ public:
 	/// @brief
 	/// @param
 	/// @return
-	friend ostream& operator<<(ostream& os, const AVLTree& me);
+	friend ostream& operator<<(ostream& os, const AVLTree& t);
+
+	/// @brief
+	/// @param
+	/// @return
+	void print(ostream& os) const;
 
 	/// @brief
 	/// @param
