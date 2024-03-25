@@ -60,6 +60,9 @@ public:
 
 	AVLTree();
 
+	/// @brief AVLTree copy constructor
+	AVLTree(const AVLTree& t);
+
 	/// @brief size field keeping track of tree size in terms of total nodes
 	int size;
 
@@ -97,10 +100,15 @@ public:
 	/// @brief
 	/// @param
 	/// @return
-	void rightRotate(Node* problem);
+	AVLTree& operator=(const AVLTree& t);
 
 	/// @brief
 	/// @param
 	/// @return
-	void leftRotate(Node* problem);
+	void rightRotate(Node*& problem);
+
+	/// @brief
+	/// @param
+	/// @return
+	void leftRotate(Node*& problem);
 };

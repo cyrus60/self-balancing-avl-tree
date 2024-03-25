@@ -1,9 +1,17 @@
 #include "AVLTree.h"
 #include <iostream>
 
+// AVLTree: main constructor
 AVLTree::AVLTree() {
 	root = nullptr;
 	size = 0;
+}
+
+// AVLTree: copy constructor
+// Paramaters
+//		t (AVLTree&) - reference to AVLTree being copied
+AVLTree::AVLTree(const AVLTree& t) {
+
 }
 
 // leftRotate: performs a right rotation at current node
@@ -11,9 +19,10 @@ AVLTree::AVLTree() {
 // Paramaters: 
 //		problem (Node*) - pointer to problem node 
 
-void AVLTree::leftRotate(Node* problem) {
+void AVLTree::leftRotate(Node*& problem) {
 	// setting hook node as problem nodes right child
 	Node* hook = problem->right;
+	Node* problemTemp = problem;
 
 	// setting temp pointer to hooks left child if one exists
 	if (hook->left) {
@@ -24,9 +33,9 @@ void AVLTree::leftRotate(Node* problem) {
 	}
 	// if hook doesn't have left child, set hooks left child equal to problem node
 	else {
-
-		hook->left = problem;
-		problem->right = nullptr;
+		problem = hook;
+		hook->left = problemTemp;
+		problemTemp->right = nullptr;
 	}
 
 	if (root->key == problem->key) {
@@ -34,7 +43,7 @@ void AVLTree::leftRotate(Node* problem) {
 	}
 
 	// recalculate heights 
-	problem->calcHeight();
+	problemTemp->calcHeight();
 	hook->calcHeight();
 }
 
@@ -42,9 +51,10 @@ void AVLTree::leftRotate(Node* problem) {
 // Returns: none
 // Paramaters: 
 //		problem (Node*) - pointer to problem node 
-void AVLTree::rightRotate(Node* problem) {
+void AVLTree::rightRotate(Node*& problem) {
 	// setting hook node as problem nodes left child
 	Node* hook = problem->left;
+	Node* problemTemp = problem;
 
 	// setting temp pointer to hooks right child if one exists
 	if (hook->right) {
@@ -55,8 +65,10 @@ void AVLTree::rightRotate(Node* problem) {
 	}
 	// if hook doesn't have right child, set hooks right child equal to problem node
 	else {
-		hook->right = problem;
-		problem->left = nullptr;
+		problem = hook;
+		hook->right = problemTemp;
+		problemTemp->left = nullptr;
+
 	}
 
 	if (root->key == problem->key) {
@@ -64,7 +76,7 @@ void AVLTree::rightRotate(Node* problem) {
 	}
 
 	// recalculate heights 
-	problem->calcHeight();
+	problemTemp->calcHeight();
 	hook->calcHeight();
 }
 
@@ -161,10 +173,10 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	int balance = current->balanceFactor();
 
 	if (balance > 1) {
-		Node* newHook = current->left->right;
 		Node* hook = current->left;
 
 		if (hook->balanceFactor() < 0) {
+			Node* newHook = current->left->right;
 			leftRotate(hook);
 			current->left = newHook;
 			rightRotate(current);
@@ -174,10 +186,10 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 		}
 	}
 	else if (balance < -1) {
-		Node* newHook = current->right->left;
 		Node* hook = current->right;
 
 		if (hook->balanceFactor() > 0) {
+			Node* newHook = current->right->left;
 			rightRotate(hook);
 			current->right = newHook;
 			leftRotate(current);
@@ -273,4 +285,13 @@ vector<string> AVLTree::findRange(int lowkey, int highkey) {
 //		tree (AVLTree&) - reference to AVLTree
 ostream& operator<<(ostream& os, const AVLTree& tree) {
 	return os;
+}
+
+// =: creates and returns indpendant copy of AVLTree
+// Returns: Reference to new AVLTree (AVLTree&)
+// Parameters: 
+//		t (AVLTree&) - reference to AVLTree being copied
+AVLTree& AVLTree::operator=(const AVLTree& t) {
+	AVLTree treeReturn;
+	return treeReturn;
 }
