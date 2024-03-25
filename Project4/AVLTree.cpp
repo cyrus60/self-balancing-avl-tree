@@ -20,10 +20,11 @@ void AVLTree::leftRotate(Node* problem) {
 		Node* temp = hook->left;
 
 		hook->left = problem;
-		problem->left->right = temp;
+		problem->right = temp;
 	}
 	// if hook doesn't have left child, set hooks left child equal to problem node
 	else {
+
 		hook->left = problem;
 		problem->right = nullptr;
 	}
@@ -33,8 +34,8 @@ void AVLTree::leftRotate(Node* problem) {
 	}
 
 	// recalculate heights 
-	hook->calcHeight();
 	problem->calcHeight();
+	hook->calcHeight();
 }
 
 // rightRotate: performs a right rotation at current node
@@ -63,8 +64,8 @@ void AVLTree::rightRotate(Node* problem) {
 	}
 
 	// recalculate heights 
-	hook->calcHeight();
 	problem->calcHeight();
+	hook->calcHeight();
 }
 
 
@@ -73,7 +74,7 @@ void AVLTree::rightRotate(Node* problem) {
 // Paramaters: none
 void AVLTree::Node::calcHeight() {
 	if (!right && !left) {
-		height = 0;;
+		height = 0;
 	}
 	else if (!left) {
 		height = right->height + 1;
@@ -160,20 +161,26 @@ bool AVLTree::insertHelper(int key, string value, Node*& current) {
 	int balance = current->balanceFactor();
 
 	if (balance > 1) {
+		Node* newHook = current->left->right;
 		Node* hook = current->left;
 
 		if (hook->balanceFactor() < 0) {
-
+			leftRotate(hook);
+			current->left = newHook;
+			rightRotate(current);
 		}
 		else {
 			rightRotate(current);
 		}
 	}
 	else if (balance < -1) {
+		Node* newHook = current->right->left;
 		Node* hook = current->right;
 
 		if (hook->balanceFactor() > 0) {
-
+			rightRotate(hook);
+			current->right = newHook;
+			leftRotate(current);
 		}
 		else {
 			leftRotate(current);
