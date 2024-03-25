@@ -20,16 +20,16 @@ void AVLTree::leftRotate(Node* problem) {
 		Node* temp = hook->left;
 
 		hook->left = problem;
-		problem->right = temp;
+		problem->left->right = temp;
 	}
 	// if hook doesn't have left child, set hooks left child equal to problem node
 	else {
 		hook->left = problem;
 		problem->right = nullptr;
+	}
 
-		if (root->key == problem->key) {
-			root = hook;
-		}
+	if (root->key == problem->key) {
+		root = hook;
 	}
 
 	// recalculate heights 
@@ -56,10 +56,10 @@ void AVLTree::rightRotate(Node* problem) {
 	else {
 		hook->right = problem;
 		problem->left = nullptr;
+	}
 
-		if (root->key == problem->key) {
-			root = hook;
-		}
+	if (root->key == problem->key) {
+		root = hook;
 	}
 
 	// recalculate heights 
