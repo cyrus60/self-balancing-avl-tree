@@ -1,3 +1,6 @@
+// Cyrus Straley 
+// Project 4
+
 #include "AVLTree.h"
 #include <iostream>
 
@@ -11,7 +14,22 @@ AVLTree::AVLTree() {
 // Paramaters
 //		t (AVLTree&) - reference to AVLTree being copied
 AVLTree::AVLTree(const AVLTree& t) {
+	size = 0;
+	root = nullptr;
 
+	// making recursive call to copyHelp function
+	copyHelp(t.root, root);
+}
+
+// ~: tree destructor
+AVLTree::~AVLTree() {
+
+	// recursively deleting all nodes in tree
+	eraseNodes(root);
+
+	// sets size back to 0 and root to null
+	size = 0;
+	root = nullptr;
 }
 
 // leftRotate: performs a right rotation at current node
@@ -272,7 +290,7 @@ int AVLTree::getHeight() {
 	return root->height;
 }
 
-// getSize: traverses tree recursively and counts number of nodes
+// getSize: returns size of tree
 // Returns: size of AVLTree based on number of nodes (int)
 // Parameters: none
 int AVLTree::getSize() {
@@ -301,19 +319,32 @@ vector<string> AVLTree::findRange(int lowkey, int highkey) {
 }
 
 // print: Prints out AVLTree sideways to demonstrate structure of the tree
-// Returns:
-// Parameters:
-void print(ostream& os) {
+// Parameters: 
+//		os (ostream&) - output stream to be printed too
+//		current (Node*) - pointer to Node
+//		depth (int) - keeps track of depth of tree while printing
+void AVLTree::print(ostream& os, Node* current, int depth) {
+	// reverse inorder traversal to print out tree horizontally
+	if (current) {
+		print(os, current->right, depth+1);
 
+		// adds a tab character for every depth of the tree
+		for (int i = 0; i < depth; i++) {
+			cout << "	";
+		}
+		cout << current->key << ", " << current->value << endl;
+
+		print(os, current->left, depth+1);
+	}
 }
 
 // <<: Prints out AVLTree sideways to demonstrate structure of the tree
-// Returns: 
+// Returns: reference to output stream (ostream&)
 // Parameters: 
 //		os (ostream&) - output streeam to be used to print
 //		tree (AVLTree&) - reference to AVLTree
-ostream& operator<<(ostream& os, const AVLTree& t) {
-	t.print(os);
+ostream& operator<<(ostream& os, AVLTree& t) {
+	t.print(os, t.root, 0);
 	return os;
 }
 
@@ -321,7 +352,42 @@ ostream& operator<<(ostream& os, const AVLTree& t) {
 // Returns: Reference to new AVLTree (AVLTree&)
 // Parameters: 
 //		t (AVLTree&) - reference to AVLTree being copied
-AVLTree& AVLTree::operator=(const AVLTree& t) {
-	AVLTree treeReturn;
-	return treeReturn;
+AVLTree& AVLTree::operator=(AVLTree& t) {
+	if (root) {
+		eraseNodes(root);
+	}
+
+	// making recursive function call 
+	copyHelp(t.root, root);
+
+	// returning a pointer to this AVLTree with contents copied from AVLTree t
+	return *this;
+}
+
+// copyHelp: recursive copyHelp function used to copy over all nodes from a tree
+// Returns: Reference to new AVLTree (AVLTree&)
+// Parameters: 
+//		t (AVLTree&) - reference to AVLTree being copied
+void AVLTree::copyHelp(Node* current, Node*& newNode) {
+	// if current node exists, copy its contents into a newNode and increment size by one
+	if (current) {
+		size += 1;
+
+		newNode = new Node(current->key, current->value);
+		newNode->height = current->height;
+
+		// make recursive calls on both side of current and newNode
+		copyHelp(current->left, newNode->left);
+		copyHelp(current->right, newNode->right);
+	}
+}
+
+// eraseNodes: recursive function deletes every node in tree
+void AVLTree::eraseNodes(Node* current) {
+	// if node exists, recursively delete all nodes and their children
+	if (current) {
+		eraseNodes(current->left);
+		eraseNodes(current->right);
+		delete current;
+	}
 }
